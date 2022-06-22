@@ -4,13 +4,13 @@ import '../models/transaction.dart';
 
 class TransactionList extends StatelessWidget {
   final List transactions;
-
-  const TransactionList(this.transactions);
+  final void Function(String) onRemove;
+  const TransactionList(this.transactions, this.onRemove);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 300,
+      height: 400,
       child: transactions.isEmpty
           ? Column(
               children: [
@@ -34,13 +34,18 @@ class TransactionList extends StatelessWidget {
               ],
             )
           : ListView.builder(
-              itemCount: transactions.length, 
+              itemCount: transactions.length,
               itemBuilder: (ctx, index) {
                 final tr = transactions[index];
                 return Card(
                   elevation: 5,
                   margin: EdgeInsets.symmetric(vertical: 8, horizontal: 5),
                   child: ListTile(
+                    trailing: IconButton(
+                      icon: Icon(Icons.delete),
+                      color: Theme.of(context).errorColor,
+                      onPressed: () => onRemove(tr.id),
+                    ),
                     leading: CircleAvatar(
                       radius: 30,
                       child: Padding(
