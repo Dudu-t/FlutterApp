@@ -42,7 +42,34 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final List<Transaction> _transactions = [];
+  final List<Transaction> _transactions = [
+    Transaction(
+        id: 't1', title: 'Teste 1', value: 199.90, date: DateTime.now()),
+    Transaction(
+        id: 't1', title: 'Teste 1', value: 199.90, date: DateTime.now()),
+    Transaction(
+        id: 't2', title: 'Teste 1', value: 199.90, date: DateTime.now()),
+    Transaction(
+        id: 't13', title: 'Teste 1', value: 199.90, date: DateTime.now()),
+    Transaction(
+        id: 't14', title: 'Teste 1', value: 199.90, date: DateTime.now()),
+    Transaction(
+        id: 't15', title: 'Teste 1', value: 199.90, date: DateTime.now()),
+    Transaction(
+        id: 't17', title: 'Teste 1', value: 199.90, date: DateTime.now()),
+    Transaction(
+        id: 't14', title: 'Teste 1', value: 199.90, date: DateTime.now()),
+    Transaction(
+        id: 't1123', title: 'Teste 1', value: 199.90, date: DateTime.now()),
+    Transaction(
+        id: 't11123', title: 'Teste 1', value: 199.90, date: DateTime.now()),
+    Transaction(
+        id: 'ts1', title: 'Teste 1', value: 199.90, date: DateTime.now()),
+    Transaction(
+        id: 't123d1', title: 'Teste 1', value: 199.90, date: DateTime.now()),
+    Transaction(
+        id: 't1a', title: 'Teste 1', value: 199.90, date: DateTime.now()),
+  ];
 
   List<Transaction> get _recentTransactions {
     return _transactions.where((tr) {
@@ -81,16 +108,20 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final AppBar appBar = AppBar(
+      title: Text('Despesas Pessoais'),
+      actions: [
+        IconButton(
+            onPressed: () => _openTransactionFormModal(context),
+            icon: Icon(Icons.add))
+      ],
+    );
+    final avaibleHeight = MediaQuery.of(context).size.height -
+        appBar.preferredSize.height -
+        MediaQuery.of(context).padding.top;
     return Center(
       child: Scaffold(
-        appBar: AppBar(
-          title: Text('Despesas Pessoais'),
-          actions: [
-            IconButton(
-                onPressed: () => _openTransactionFormModal(context),
-                icon: Icon(Icons.add))
-          ],
-        ),
+        appBar: appBar,
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
@@ -101,10 +132,16 @@ class _MyHomePageState extends State<MyHomePage> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Chart(_recentTransactions),
+                Container(
+                  height: avaibleHeight * 0.3,
+                  child: Chart(_recentTransactions),
+                ),
                 Column(
                   children: [
-                    TransactionList(_transactions, _removeTransaction),
+                    Container(
+                      height: avaibleHeight * 0.7,
+                      child: TransactionList(_transactions, _removeTransaction),
+                    ),
                   ],
                 ),
               ]),
