@@ -49,56 +49,62 @@ class _TransactionFormState extends State<TransactionForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 5,
-      child: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Column(
-          children: [
-            TextField(
-              controller: _insertedTransaction['title'],
-              decoration: InputDecoration(
-                labelText: 'Título',
+    return SingleChildScrollView(
+      child: Card(
+        elevation: 5,
+        child: Padding(
+          padding: EdgeInsets.only(
+              top: 10,
+              right: 10,
+              left: 10,
+              bottom: 10 + MediaQuery.of(context).viewInsets.bottom),
+          child: Column(
+            children: [
+              TextField(
+                controller: _insertedTransaction['title'],
+                decoration: InputDecoration(
+                  labelText: 'Título',
+                ),
+                onSubmitted: (_) => _submitForm(),
               ),
-              onSubmitted: (_) => _submitForm(),
-            ),
-            TextField(
-              controller: _insertedTransaction['value'],
-              keyboardType: TextInputType.numberWithOptions(decimal: true),
-              decoration: InputDecoration(labelText: 'Valor(R\$)'),
-              onSubmitted: (_) => _submitForm(),
-            ),
-            Container(
-              height: 70,
-              child: Row(
+              TextField(
+                controller: _insertedTransaction['value'],
+                keyboardType: TextInputType.numberWithOptions(decimal: true),
+                decoration: InputDecoration(labelText: 'Valor(R\$)'),
+                onSubmitted: (_) => _submitForm(),
+              ),
+              Container(
+                height: 70,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(_insertedTransaction['selectedDate'] == null
+                          ? 'Nenhuma data selecionada!'
+                          : 'Data selectionada: ${DateFormat('dd/MM/y ').format(_insertedTransaction['selectedDate'])}'),
+                    ),
+                    TextButton(
+                        onPressed: _showDatePicker,
+                        child: Text(
+                          'Selecionar Data',
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ))
+                  ],
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Expanded(
-                    child: Text(_insertedTransaction['selectedDate'] == null
-                        ? 'Nenhuma data selecionada!'
-                        : 'Data selectionada: ${DateFormat('dd/MM/y ').format(_insertedTransaction['selectedDate'])}'),
+                  ElevatedButton(
+                    child: Text('Nova Transação'),
+                    onPressed: _submitForm,
                   ),
-                  TextButton(
-                      onPressed: _showDatePicker,
-                      child: Text(
-                        'Selecionar Data',
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.primary,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ))
                 ],
               ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                ElevatedButton(
-                  child: Text('Nova Transação'),
-                  onPressed: _submitForm,
-                ),
-              ],
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

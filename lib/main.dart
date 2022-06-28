@@ -45,12 +45,12 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final List<Transaction> _transactions = [
-    // Transaction(
-    //     id: 't1', title: 'Teste 1', value: 199.90, date: DateTime.now()),
-    // Transaction(
-    //     id: 't1', title: 'Teste 1', value: 199.90, date: DateTime.now()),
-    // Transaction(
-    //     id: 't2', title: 'Teste 1', value: 199.90, date: DateTime.now()),
+    Transaction(
+        id: 't1', title: 'Teste 1', value: 199.90, date: DateTime.now()),
+    Transaction(
+        id: 't1', title: 'Teste 1', value: 199.90, date: DateTime.now()),
+    Transaction(
+        id: 't2', title: 'Teste 1', value: 199.90, date: DateTime.now()),
     // Transaction(
     //     id: 't13', title: 'Teste 1', value: 199.90, date: DateTime.now()),
     // Transaction(
@@ -103,6 +103,7 @@ class _MyHomePageState extends State<MyHomePage> {
   _openTransactionFormModal(BuildContext context) {
     showModalBottomSheet(
         context: context,
+        isScrollControlled: true,
         builder: (_) {
           return TransactionForm(_addTransaction);
         });
@@ -110,21 +111,31 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    bool isLandscape =
-        MediaQuery.of(context).orientation == Orientation.landscape;
+    final MediaQueryData mediaQuery = MediaQuery.of(context);
+    bool isLandscape = mediaQuery.orientation == Orientation.landscape;
     final AppBar appBar = AppBar(
       title: Text(
         'Despesas Pessoais',
       ),
       actions: [
+        if (isLandscape)
+          IconButton(
+            onPressed: () {
+              setState(() {
+                _showChart = !_showChart;
+              });
+            },
+            icon: Icon(_showChart ? Icons.list : Icons.show_chart),
+          ),
         IconButton(
-            onPressed: () => _openTransactionFormModal(context),
-            icon: Icon(Icons.add))
+          onPressed: () => _openTransactionFormModal(context),
+          icon: Icon(Icons.add),
+        ),
       ],
     );
-    final avaibleHeight = MediaQuery.of(context).size.height -
+    final avaibleHeight = mediaQuery.size.height -
         appBar.preferredSize.height -
-        MediaQuery.of(context).padding.top;
+        mediaQuery.padding.top;
 
     return Center(
       child: Scaffold(
@@ -139,20 +150,6 @@ class _MyHomePageState extends State<MyHomePage> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                if (isLandscape)
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text('Exibir Gráfico'),
-                      Switch(
-                          value: _showChart,
-                          onChanged: (value) {
-                            setState(() {
-                              _showChart = value;
-                            });
-                          }),
-                    ],
-                  ),
                 if (_showChart || !isLandscape)
                   Container(
                     height: avaibleHeight * (isLandscape ? 0.7 : 0.30),
@@ -162,7 +159,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   Column(
                     children: [
                       Container(
-                        height: avaibleHeight * 0.70,
+                        height: avaibleHeight * (isLandscape ? 1 : 0.7),
                         child:
                             TransactionList(_transactions, _removeTransaction),
                       ),
